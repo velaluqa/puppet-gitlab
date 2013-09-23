@@ -1,7 +1,7 @@
-# Class:: gitlab::pre
+# Class:: gitlab::dependencies
 #
 #
-class gitlab::pre {
+class gitlab::dependencies {
 
   include gitlab
 
@@ -29,6 +29,8 @@ class gitlab::pre {
       mode    => '0755',
   }
 
+  class { 'redis': }
+
   # try and decide about the family here,
   # deal with version/dist specifics within the class
   case $::osfamily {
@@ -45,9 +47,8 @@ class gitlab::pre {
       }
 
       package {
-        ['libicu-dev','python2.7',
-          'libxml2-dev','libxslt1-dev','python-dev']:
-            ensure  => installed;
+        ['libicu-dev','python2.7', 'libxml2-dev','libxslt1-dev','python-dev']:
+           ensure  => installed;
       }
 
       if !defined(Package['git-core']) {
@@ -64,12 +65,11 @@ class gitlab::pre {
       }
 
       package {
-        ['perl-Time-HiRes',
-          'libicu-devel','libxml2-devel','libxslt-devel',
-          'python-devel','libcurl-devel','readline-devel','openssl-devel',
-          'zlib-devel','libyaml-devel']:
-            ensure   => latest,
-            provider => yum;
+        ['perl-Time-HiRes', 'libicu-devel','libxml2-devel','libxslt-devel',
+         'python-devel','libcurl-devel','readline-devel','openssl-devel',
+         'zlib-devel','libyaml-devel']:
+           ensure   => latest,
+           provider => yum;
       }
 
     } # Redhat pre-requists
@@ -78,9 +78,8 @@ class gitlab::pre {
     }
   }
 
-  package {
-    $db_packages:
-      ensure   => installed;
+  package { $db_packages:
+    ensure   => installed;
   }
 
   if !defined(Package['openssh-server']) {
@@ -92,4 +91,4 @@ class gitlab::pre {
   if !defined(Package['curl']) {
     package { 'curl': ensure => present; }
   }
-} # Class:: gitlab::pre
+} # Class:: gitlab::dependencies

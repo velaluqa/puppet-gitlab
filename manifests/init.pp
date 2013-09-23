@@ -33,6 +33,7 @@
 # [ldap_method] Method to use (default: ssl)
 # [ldap_bind_dn] User for LDAP bind auth (default: nil)
 # [ldap_bind_password] Password for LDN bind auth (default: nil)
+# [rvm_ruby] If you want to use RVM, specify a ruby version to use. (default: '')
 #
 # === Examples
 #
@@ -52,6 +53,7 @@
 # Andrew Tomaka <atomaka@gmail.com>
 # Uwe Kleinmann <uwe@kleinmann.org>
 # Matt Klich <matt@elementalvoid.com>
+# Arthur Leonard Andersen <leoc.git@gmail.com>
 #
 # === Copyright
 #
@@ -90,19 +92,29 @@ class gitlab(
     $ldap_port              = $gitlab::params::ldap_port,
     $ldap_method            = $gitlab::params::ldap_method,
     $ldap_bind_dn           = $gitlab::params::ldap_bind_dn,
-    $ldap_bind_password     = $gitlab::params::ldap_bind_password
+    $ldap_bind_password     = $gitlab::params::ldap_bind_password,
+    $rvm_ruby               = $gitlab::params::rvm_ruby
   ) inherits gitlab::params {
-  # FIXME class inheriting from params class
-  case $::osfamily {
-    Debian: {
-      include gitlab::server
-    }
-    Redhat: {
-      warning("${::osfamily} not fully tested with gitlab 5.0")
-      include gitlab::server
-    }
-    default: {
-      fail("${::osfamily} not supported yet")
-    }
-  } # case
+
+
+  class { "gitlab::dependencies": }
+
+  class { "gitlab::checkout":
+    require => Class["gitlab::dependencies"]
+  }
+
+  class { 'gitlab::config':
+    require => Class["gitlab::checkout", "gitlab::dependencies"]
+  }
+
+  class { 'gitlab::gitlabshell':
+    require => Class["gitlab::config"]
+  }
+
+  service { "gitlab":
+    ensure => running,
+    enable => true,
+    require => [ Class["gitlab::dependencies"], Class["gitlab::checkout"], Class["gitlab::config"] ],
+    subscribe => [ Class["gitlab::dependencies"], Class["gitlab::checkout"], Class["gitlab::config"] ],
+  }
 } # Class:: gitlab

@@ -28,7 +28,6 @@ class gitlab::server {
   $ldap_bind_dn       = $gitlab::ldap_bind_dn
   $ldap_bind_password = $gitlab::ldap_bind_password
 
-
   package {
     'bundler':
       ensure   => installed,

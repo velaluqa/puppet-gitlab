@@ -2,7 +2,7 @@
 
 # GITLAB
 # Maintainer: @randx
-# App Version: 5.2
+# App Version: <%= @gitlab_branch %>
 
 ### BEGIN INIT INFO
 # Provides:          gitlab
@@ -39,7 +39,7 @@ check_pid(){
 }
 
 execute() {
-  sudo -u $APP_USER -H bash -l -c "$1"
+  sudo -u $APP_USER -H bash -l -c "<%= @rvm_prefix %>$1"
 }
 
 start() {
