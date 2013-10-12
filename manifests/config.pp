@@ -1,5 +1,4 @@
 class gitlab::config {
-
   include gitlab
 
   $gitlab_dbtype      = $gitlab::gitlab_dbtype
@@ -68,7 +67,8 @@ class gitlab::config {
   }
 
   file { "/etc/init.d/gitlab":
-    content => template("gitlab/gitlab.init.erb"),
+    ensure => link,
+    target => "${git_home}/gitlab/lib/support/init.d/gitlab",
     owner => "root",
     group => "root",
     mode => 0755,
