@@ -23,45 +23,6 @@ class gitlab::config {
   $ldap_method        = $gitlab::ldap_method
   $ldap_bind_dn       = $gitlab::ldap_bind_dn
   $ldap_bind_password = $gitlab::ldap_bind_password
-  $rvm_ruby           = $gitlab::rvm_ruby
-
-  if $rvm_ruby != '' {
-    $rvm_prefix     = "source /usr/local/rvm/scripts/rvm; rvm use ${rvm_ruby}; "
-  } else {
-    $rvm_prefix       = ''
-  }
-
-  case $gitlab_dbtype {
-    "mysql": {
-      mysql::db { $gitlab_dbname :
-        user     => $gitlab_dbuser,
-        password => $gitlab_dbpwd,
-        host     => $gitlab_dbhost,
-        grant    => ['all'],
-        before   => Exec["gitlab-migrate"],
-      }
-    }
-    "pgsql": {
-      postgresql::database { $gitlab_dbname:
-        require     => Class['postgresql::server'],
-        locale      => $locale,
-      }
-
-      postgresql::database_user { $gitlab_dbuser:
-        password_hash   => postgresql_password($gitlab_dbuser, $gitlab_dbpwd),
-        superuser       => true, # suggested fix by gitlab ticket list for postgres
-        require         => Postgresql::Database[$gitlab_dbname],
-      }
-
-      postgresql::database_grant { "GRANT ${$gitlab_dbuser} - ALL - ${gitlab_dbname}":
-        privilege       => 'ALL',
-        db              => $gitlab_dbname,
-        role            => $gitlab_dbuser,
-        require         => [Postgresql::Database[$gitlab_dbname], Postgresql::Database_user[$gitlab_dbuser]],
-        before   => Exec["gitlab-migrate"],
-      }
-    }
-  }
 
   file { "${git_home}/gitlab/config/database.yml":
     content => template("gitlab/database.yml.erb"),
@@ -73,8 +34,8 @@ class gitlab::config {
   # The database is created by the postgres/mysql puppet modules.
   exec { "gitlab-migrate":
     path => "/bin:/usr/bin",
-    unless => "bash -c '${rvm_prefix}cd ${git_home}/gitlab; RAILS_ENV=production bundle exec rake db:abort_if_pending_migrations'",
-    command => "bash -c '${rvm_prefix}cd ${git_home}/gitlab; RAILS_ENV=production bundle exec rake db:migrate'",
+    unless => "bash -c 'cd ${git_home}/gitlab; RAILS_ENV=production bundle exec rake db:abort_if_pending_migrations'",
+    command => "bash -c 'cd ${git_home}/gitlab; RAILS_ENV=production bundle exec rake db:migrate'",
     require => File["${git_home}/gitlab/config/database.yml"],
     notify => Service["gitlab"],
     user => $git_user,
@@ -85,7 +46,7 @@ class gitlab::config {
   exec { "gitlab-seed":
     path => "/bin:/usr/bin",
     command => "echo",
-    onlyif => "bash -c '${rvm_prefix}cd ${git_home}/gitlab; bundle exec rake db:seed_fu RAILS_ENV=production | grep -q \": migrating\"'",
+    onlyif => "bash -c 'cd ${git_home}/gitlab; bundle exec rake db:seed_fu RAILS_ENV=production | grep -q \": migrating\"'",
     require => Exec["gitlab-migrate"],
     creates => "${git_home}/.gitlab_setup_done",
     unless   => "/usr/bin/test -f ${git_home}/.gitlab_setup_done",

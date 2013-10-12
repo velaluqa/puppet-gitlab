@@ -33,7 +33,6 @@
 # [ldap_method] Method to use (default: ssl)
 # [ldap_bind_dn] User for LDAP bind auth (default: nil)
 # [ldap_bind_password] Password for LDN bind auth (default: nil)
-# [rvm_ruby] If you want to use RVM, specify a ruby version to use. (default: '')
 #
 # === Examples
 #
@@ -93,7 +92,6 @@ class gitlab(
     $ldap_method            = $gitlab::params::ldap_method,
     $ldap_bind_dn           = $gitlab::params::ldap_bind_dn,
     $ldap_bind_password     = $gitlab::params::ldap_bind_password,
-    $rvm_ruby               = $gitlab::params::rvm_ruby
   ) inherits gitlab::params {
 
 

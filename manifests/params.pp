@@ -33,6 +33,5 @@ class gitlab::params {
   $ldap_method            = 'ssl'
   $ldap_bind_dn           = ''
   $ldap_bind_password     = ''
-  $rvm_ruby               = ''
 
 } # Class:: gitlab::params

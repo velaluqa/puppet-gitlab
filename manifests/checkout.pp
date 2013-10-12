@@ -1,5 +1,4 @@
 class gitlab::checkout {
-
   include gitlab
 
   $git_user         = $gitlab::git_user
@@ -8,13 +7,6 @@ class gitlab::checkout {
   $gitlab_branch    = $gitlab::gitlab_branch
   $gitlab_domain    = $gitlab::gitlab_domain
   $gitlab_repodir   = $gitlab::gitlab_repodir
-  $rvm_ruby         = $gitlab::rvm_ruby
-
-  if $rvm_ruby != '' {
-    $rvm_prefix     = "source /usr/local/rvm/scripts/rvm; rvm use ${rvm_ruby}; "
-  } else {
-    $rvm_prefix     = ''
-  }
 
   $without_gems = $gitlab_dbtype ? {
     mysql => "development test postgres",
