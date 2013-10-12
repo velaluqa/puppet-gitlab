@@ -13,9 +13,12 @@ production:
   pool: 5
   username: <%= @gitlab_dbuser %>
   password: <%= @gitlab_dbpwd %>
-  host: <%= @gitlab_dbhost %>
-  # host: localhost
-  # socket: /tmp/mysql.sock
+<%- if @gitlab_dbsocket -%>
+  socket: <%= @gitlab_dbsocket %>
+<%- else -%>
+  host: '<%= @gitlab_dbhost ? @gitlab_dbhost : 'localhost' %>'
+  port: '<%= @gitlab_dbport ? @gitlab_dbport : '3306' %>'
+<%- end -%>
 <% when 'pgsql' -%>
 production:
   adapter: postgresql
@@ -24,9 +27,10 @@ production:
   pool: 5
   username: '<%= @gitlab_dbuser %>'
   password: '<%= @gitlab_dbpwd %>'
-  host: '<%= @gitlab_dbhost %>'
-  port: '<%= @gitlab_dbport %>'
-  # host: localhost
-  # port: 5432
-  # socket: /tmp/postgresql.sock
+<%- if @gitlab_dbsocket -%>
+  socket: <%= @gitlab_dbsocket %>
+<%- else -%>
+  host: '<%= @gitlab_dbhost ? @gitlab_dbhost : 'localhost' %>'
+  port: '<%= @gitlab_dbport ? @gitlab_dbport : '5432' %>'
+<%- end -%>
 <% end -%>

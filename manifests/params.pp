@@ -12,11 +12,12 @@ class gitlab::params {
   $gitlabshell_sources    = 'git://github.com/gitlabhq/gitlab-shell.git'
   $gitlabshell_branch     = 'v1.5.0'
   $gitlab_dbtype          = 'mysql'
-  $gitlab_dbname          = 'gitlabdb'
-  $gitlab_dbuser          = 'gitlabdbu'
+  $gitlab_dbname          = 'gitlab'
+  $gitlab_dbuser          = 'gitlab'
   $gitlab_dbpwd           = 'changeme'
-  $gitlab_dbhost          = 'localhost'
-  $gitlab_dbport          = '3306'
+  $gitlab_dbhost          = undef
+  $gitlab_dbport          = undef
+  $gitlab_dbsocket        = undef
   $gitlab_domain          = $::fqdn
   $gitlab_repodir         = $git_home
   $gitlab_ssl             = false

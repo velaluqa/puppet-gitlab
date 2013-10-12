@@ -76,6 +76,7 @@ class gitlab(
     $gitlab_dbpwd           = $gitlab::params::gitlab_dbpwd,
     $gitlab_dbhost          = $gitlab::params::gitlab_dbhost,
     $gitlab_dbport          = $gitlab::params::gitlab_dbport,
+    $gitlab_dbsocket        = $gitlab::params::gitlab_dbsocket,
     $gitlab_domain          = $gitlab::params::gitlab_domain,
     $gitlab_repodir         = $gitlab::params::gitlab_repodir,
     $gitlab_ssl             = $gitlab::params::gitlab_ssl,
