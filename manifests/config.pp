@@ -94,8 +94,8 @@ class gitlab::config {
     timeout => 600,
   }
 
-  file { "${git_home}/gitlab/config/puma.rb":
-    content => template("gitlab/puma.rb.erb"),
+  file { "${git_home}/gitlab/config/unicorn.rb":
+    content => template("gitlab/unicorn.rb.erb"),
     owner => $git_user,
     group => $git_user,
   }
