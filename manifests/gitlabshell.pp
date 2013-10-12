@@ -40,5 +40,4 @@ class gitlab::gitlabshell {
     logoutput => 'on_failure',
     creates   => "${gitlab_repodir}/repositories";
   }
-
 } # Class:: gitlab::gitlabshell
