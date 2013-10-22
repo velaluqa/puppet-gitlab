@@ -44,11 +44,9 @@ class gitlab::config {
 
   exec { "gitlab-seed":
     path => "/bin:/usr/bin",
-    command => "echo",
-    onlyif => "bash -c 'cd ${git_home}/gitlab; bundle exec rake db:seed_fu RAILS_ENV=production | grep -q \": migrating\"'",
+    command => "bash -c 'cd ${git_home}/gitlab; bundle exec rake db:seed_fu RAILS_ENV=production",
+    onlyif => "bash -c 'cd ${git_home}/gitlab; bundle exec rails runner -e production \"if User.exists? then exit(1) else exit(0) end\"'",
     require => Exec["gitlab-migrate"],
-    creates => "${git_home}/.gitlab_setup_done",
-    unless   => "/usr/bin/test -f ${git_home}/.gitlab_setup_done",
     user => $git_user,
     group => $git_user,
     timeout => 600,
