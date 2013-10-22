@@ -22,19 +22,11 @@ class gitlab::checkout {
     group => $git_user
   }
 
-  exec { "gitlab-update":
-    path => "/bin:/usr/bin",
-    command => "bash -c 'cd ${git_home}/gitlab; git fetch'",
-    require => Exec["gitlab-checkout"],
-    user => $git_user,
-    group => $git_user
-  }
-
   exec { "gitlab-upgrade":
     path => "/bin:/usr/bin",
-    onlyif => "bash -c 'cd ${git_home}/gitlab; git diff HEAD..origin/${gitlab_branch} | grep -q ^---'",
+    onlyif => "bash -c 'cd ${git_home}/gitlab; git fetch; git diff HEAD..origin/${gitlab_branch} | grep -q ^---'",
     command => "bash -c 'cd ${git_home}/gitlab; git checkout db/schema.rb; git checkout origin/${gitlab_branch}'",
-    require => Exec["gitlab-update"],
+    require => Exec["gitlab-checkout"],
     user => $git_user,
     group => $git_user
   }
