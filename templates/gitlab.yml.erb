@@ -108,7 +108,7 @@ production: &base
     bind_dn: '<%= @ldap_bind_dn %>'
     password: '<%= @ldap_bind_password %>'
 <% end -%>
-    allow_username_or_email_login: true
+    allow_username_or_email_login: <%= @ldap_allow_username_or_email_login %>
 
   ## OmniAuth settings
   omniauth:
