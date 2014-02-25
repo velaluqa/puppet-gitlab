@@ -1,27 +1,34 @@
 class gitlab::config {
   include gitlab
 
-  $gitlab_dbtype      = $gitlab::gitlab_dbtype
-  $gitlab_dbname      = $gitlab::gitlab_dbname
-  $gitlab_dbuser      = $gitlab::gitlab_dbuser
-  $gitlab_dbpwd       = $gitlab::gitlab_dbpwd
-  $gitlab_dbhost      = $gitlab::gitlab_dbhost
-  $gitlab_dbport      = $gitlab::gitlab_dbport
-  $gitlab_domain      = $gitlab::gitlab_domain
-  $gitlab_repodir     = $gitlab::gitlab_repodir
-  $gitlab_branch      = $gitlab::gitlab_branch
-  $gitlab_sources     = $gitlab::gitlab_sources
-  $git_home           = $gitlab::git_home
-  $git_user           = $gitlab::git_user
-  $git_email          = $gitlab::git_email
-  $ldap_enabled       = $gitlab::ldap_enabled
-  $ldap_host          = $gitlab::ldap_host
-  $ldap_base          = $gitlab::ldap_base
-  $ldap_uid           = $gitlab::ldap_uid
-  $ldap_port          = $gitlab::ldap_port
-  $ldap_method        = $gitlab::ldap_method
-  $ldap_bind_dn       = $gitlab::ldap_bind_dn
-  $ldap_bind_password = $gitlab::ldap_bind_password
+  $gitlab_dbtype             = $gitlab::gitlab_dbtype
+  $gitlab_dbname             = $gitlab::gitlab_dbname
+  $gitlab_dbuser             = $gitlab::gitlab_dbuser
+  $gitlab_dbpwd              = $gitlab::gitlab_dbpwd
+  $gitlab_dbhost             = $gitlab::gitlab_dbhost
+  $gitlab_dbport             = $gitlab::gitlab_dbport
+  $gitlab_domain             = $gitlab::gitlab_domain
+  $gitlab_repodir            = $gitlab::gitlab_repodir
+  $gitlab_branch             = $gitlab::gitlab_branch
+  $gitlab_sources            = $gitlab::gitlab_sources
+  $git_home                  = $gitlab::git_home
+  $git_user                  = $gitlab::git_user
+  $git_email                 = $gitlab::git_email
+  $ldap_enabled              = $gitlab::ldap_enabled
+  $ldap_host                 = $gitlab::ldap_host
+  $ldap_base                 = $gitlab::ldap_base
+  $ldap_uid                  = $gitlab::ldap_uid
+  $ldap_port                 = $gitlab::ldap_port
+  $ldap_method               = $gitlab::ldap_method
+  $ldap_bind_dn              = $gitlab::ldap_bind_dn
+  $ldap_bind_password        = $gitlab::ldap_bind_password
+  $smtp_address              = $gitlab::smtp_address
+  $smtp_port                 = $gitlab::smtp_port
+  $smtp_domain               = $gitlab::smtp_domain
+  $smtp_user_name            = $gitlab::smtp_user_name
+  $smtp_password             = $gitlab::smtp_password
+  $smtp_authentication       = $gitlab::smtp_authentication
+  $smtp_enable_starttls_auto = $gitlab::smtp_enable_starttls_auto
 
   file { "${git_home}/gitlab/config/database.yml":
     content => template("gitlab/database.yml.erb"),
@@ -62,6 +69,12 @@ class gitlab::config {
     content => template("gitlab/gitlab.yml.erb"),
     owner => $git_user,
     group => $git_user,
+  }
+
+  file { "${git_home}/gitlab/config/environments/production.rb":
+    content => template("gitlab/production.rb.erb"),
+    owner   => $git_user,
+    group   => $git_user,
   }
 
   file { "/etc/init.d/gitlab":

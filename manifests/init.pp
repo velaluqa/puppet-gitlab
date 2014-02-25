@@ -33,6 +33,13 @@
 # [ldap_method] Method to use (default: ssl)
 # [ldap_bind_dn] User for LDAP bind auth (default: nil)
 # [ldap_bind_password] Password for LDN bind auth (default: nil)
+# [smtp_address] Allows you to use a remote mail server. (default: localhost)
+# [smtp_port] On the off chance that your mail server doesn't run on the default port, you can change it (default: 587)
+# [smtp_domain] If you need to specify a HELO domain, you can do it here (defailt: nil)
+# [smtp_user_name] If your mail server requires authentication, set the username in this setting (default: nil)
+# [smtp_password] If your mail server requires authentication, set the password in this setting (default: nil)
+# [smtp_authentication] If your mail server requires authentication, you need to specify the authentication type here. This is one of plain, login (default), cram_md5.
+# [smtp_enable_starttls_auto] Set this to false if there is a problem with your server certificate that you cannot resolve (default: true)
 #
 # === Examples
 #
@@ -94,6 +101,13 @@ class gitlab(
     $ldap_bind_dn                       = $gitlab::params::ldap_bind_dn,
     $ldap_bind_password                 = $gitlab::params::ldap_bind_password,
     $ldap_allow_username_or_email_login = $gitlab::params::ldap_allow_username_or_email_login,
+    $smtp_address                       = $gitlab::params::smtp_address,
+    $smtp_port                          = $gitlab::params::smtp_port,
+    $smtp_domain                        = $gitlab::params::smtp_domain,
+    $smtp_user_name                     = $gitlab::params::smtp_user_name,
+    $smtp_password                      = $gitlab::params::smtp_password,
+    $smtp_authentication                = $gitlab::params::smtp_authentication,
+    $smtp_enable_starttls_auto          = $gitlab::params::smtp_enable_starttls_auto,
   ) inherits gitlab::params {
 
 

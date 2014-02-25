@@ -35,5 +35,12 @@ class gitlab::params {
   $ldap_bind_dn                       = ''
   $ldap_bind_password                 = ''
   $ldap_allow_username_or_email_login = true
+  $smtp_address                       = 'localhost'
+  $smtp_port                          = 587
+  $smtp_domain                        = undef
+  $smtp_user_name                     = undef
+  $smtp_password                      = undef
+  $smtp_authentication                = 'login'
+  $smtp_enable_starttls_auto          = true
 
 } # Class:: gitlab::params
